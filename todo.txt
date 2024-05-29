@@ -1,7 +1,11 @@
-- aggiungere punti a giocatori
-- aggiornare tutti le stringhe con config
+- aggiungere punti a giocatore che apre
+- aggiungere punti a giocatori vicini
+- aggiornare tutte le stringhe con config
 - rinominare tutte le instanze della parola "chest" in "treasure"
 - se chest si rompe levarla
 - se clicco su cartografo NPC con una mappa allora mi da la mappa aggiornata
 - aggiungere supporto per nether
 - aggiungere premio nella chest
+- fare in modo che la chest compaia in una caverna 
+- non deve essere solo a 0 coordinate y 
+- fare in modo che il task di aggiornamento e creazione nuova treasure chest sia molto lento

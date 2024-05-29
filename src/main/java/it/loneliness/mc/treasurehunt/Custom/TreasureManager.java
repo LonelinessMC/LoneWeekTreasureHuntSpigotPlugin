@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,16 +29,31 @@ public class TreasureManager {
     private File chestLocationsFile;
     private final LogHandler logger;
     private TreasureArea area;
+    private Lock lock;
 
     public TreasureManager(Plugin plugin, LogHandler logger) {
         this.plugin = plugin;
         this.logger = logger;
-        this.area = new TreasureArea(plugin);
+        this.area = new TreasureArea(plugin, logger);
+        this.lock = new ReentrantLock();
     }
 
-    public void spawnTreasureRandomly(){
-        Location loc = area.getRandomLocation(area.getRandomWorld());
-        spawnTreasureInLocation(loc);
+    public void spawnTreasureRandomly() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(lock.tryLock()){
+                    try{
+                        Location loc = area.getRandomLocation(area.getRandomWorld());
+                        spawnTreasureInLocation(loc);
+                    } finally {
+                        lock.unlock();
+                    }
+                } else {
+                    logger.info("spawnTreasureRandomly is already being executed");
+                }
+            }
+        }.runTaskAsynchronously(this.plugin);
     }
 
     public void spawnTreasureInLocation(Location location) {
@@ -55,6 +73,7 @@ public class TreasureManager {
                     // Chest chest = (Chest) state;
                     // populateChest(chest.getInventory());
                     chestLocations.add(location);
+                    Announcement.getInstance(plugin).announce("un nuovo tesoro è stato individuato, una /th find");
                 }
             }
         }.runTask(this.plugin);
@@ -122,10 +141,9 @@ public class TreasureManager {
         return this.chestLocations;
     }
 
-    public void periodicRunner(){
-        if(this.getChestsLocations().size() == 0){
+    public void periodicRunner() {
+        if (this.getChestsLocations().size() == 0) {
             this.spawnTreasureRandomly();
-            Announcement.getInstance(plugin).announce(" - un nuovo tesoro è stato individuato, una /th find");;
         }
     }
 }

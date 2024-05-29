@@ -56,9 +56,16 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         commandList.add(new CommandEntry("list", permissionPrefix, this::getList, true));
         commandList.add(new CommandEntry("find", permissionPrefix, this::findClosestTreasure, false));
         commandList.add(new CommandEntry("despawnall", permissionPrefix, this::despawnAllTreasures, false));
+        commandList.add(new CommandEntry("runperiodic", permissionPrefix, this::runPeriodicTask, true));
 
         this.chestManager = chestManager;
         this.announcement = Announcement.getInstance(plugin);
+    }
+
+    private boolean runPeriodicTask(CommandParams params){
+        chestManager.periodicRunner();
+        announcement.sendPrivateMessage(params.sender, "Running periodic task forcfully");
+        return true;
     }
 
     private boolean despawnAllTreasures(CommandParams params){
