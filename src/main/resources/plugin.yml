@@ -1,0 +1,10 @@
+main: it.loneliness.mc.treasurehunt.Plugin
+name: TreasureHunt
+version: 0.1
+api-version: 1.20
+depend: [Locale-API]
+commands:
+  treasurehunt:
+    description: Base command for TreasureHunt plugin
+    usage: /<command> <subcommand>
+    aliases: [th]
