@@ -1,0 +1,7 @@
+- aggiungere punti a giocatori
+- aggiornare tutti le stringhe con config
+- rinominare tutte le instanze della parola "chest" in "treasure"
+- se chest si rompe levarla
+- se clicco su cartografo NPC con una mappa allora mi da la mappa aggiornata
+- aggiungere supporto per nether
+- aggiungere premio nella chest

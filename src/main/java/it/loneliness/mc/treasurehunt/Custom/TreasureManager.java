@@ -15,19 +15,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import it.loneliness.mc.treasurehunt.Plugin;
+import it.loneliness.mc.treasurehunt.Controller.Announcement;
 import it.loneliness.mc.treasurehunt.Model.LogHandler;
 
-public class ChestManager {
+public class TreasureManager {
     private static String STORAGE_FILE = "chestLocations.yml";
     private final List<Location> chestLocations = new CopyOnWriteArrayList<>();
     private Plugin plugin;
     private YamlConfiguration chestLocationsConfig;
     private File chestLocationsFile;
     private final LogHandler logger;
+    private TreasureArea area;
 
-    public ChestManager(Plugin plugin, LogHandler logger) {
+    public TreasureManager(Plugin plugin, LogHandler logger) {
         this.plugin = plugin;
         this.logger = logger;
+        this.area = new TreasureArea(plugin);
+    }
+
+    public void spawnTreasureRandomly(){
+        Location loc = area.getRandomLocation(area.getRandomWorld());
+        spawnTreasureInLocation(loc);
     }
 
     public void spawnTreasureInLocation(Location location) {
@@ -112,5 +120,12 @@ public class ChestManager {
 
     public List<Location> getChestsLocations() {
         return this.chestLocations;
+    }
+
+    public void periodicRunner(){
+        if(this.getChestsLocations().size() == 0){
+            this.spawnTreasureRandomly();
+            Announcement.getInstance(plugin).announce(" - un nuovo tesoro è stato individuato, una /th find");;
+        }
     }
 }

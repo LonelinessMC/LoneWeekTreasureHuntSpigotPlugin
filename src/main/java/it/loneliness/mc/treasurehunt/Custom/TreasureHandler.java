@@ -1,6 +1,5 @@
 package it.loneliness.mc.treasurehunt.Custom;
 
-import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,15 +17,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import it.loneliness.mc.treasurehunt.Model.LogHandler;
 
-import java.util.Random;
-
-public class ChestHandler implements Listener {
+public class TreasureHandler implements Listener {
 
     private final JavaPlugin plugin;
+    @SuppressWarnings("unused")
     private final LogHandler logger;
-    private final ChestManager chestManager;
+    private final TreasureManager chestManager;
 
-    public ChestHandler(JavaPlugin plugin, LogHandler logger, ChestManager chestManager) {
+    public TreasureHandler(JavaPlugin plugin, LogHandler logger, TreasureManager chestManager) {
         this.plugin = plugin;
         this.logger = logger;
         this.chestManager = chestManager;

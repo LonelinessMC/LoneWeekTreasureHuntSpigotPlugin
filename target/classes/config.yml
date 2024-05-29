@@ -1,6 +1,9 @@
 chat-prefix: "&#FE6847[&#FBB13CLoneWeek TreasureHunt&#FE6847] "
 scoreboard-id: "punteggiotreasurehunt"
 
+min-distance-from-center: 1000
+max-distance-from-center: 3500
+
 
 
 
