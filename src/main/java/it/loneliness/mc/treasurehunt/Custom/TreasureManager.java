@@ -27,11 +27,11 @@ import it.loneliness.mc.treasurehunt.Controller.Announcement;
 import it.loneliness.mc.treasurehunt.Model.LogHandler;
 
 public class TreasureManager {
-    private static String STORAGE_FILE = "chestLocations.yml";
-    private final List<Location> chestLocations = new CopyOnWriteArrayList<>();
+    private static String STORAGE_FILE = "treasureLocations.yml";
+    private final List<Location> treasureLocations = new CopyOnWriteArrayList<>();
     private Plugin plugin;
-    private YamlConfiguration chestLocationsConfig;
-    private File chestLocationsFile;
+    private YamlConfiguration treasureLocationsConfig;
+    private File treasureLocationsFile;
     private final LogHandler logger;
     private TreasureArea area;
     private Lock lock;
@@ -144,7 +144,7 @@ public class TreasureManager {
                 if (state instanceof Chest) {
                     // Chest chest = (Chest) state;
                     // populateChest(chest.getInventory());
-                    chestLocations.add(location);
+                    treasureLocations.add(location);
                     Announcement.getInstance(plugin).announce("un nuovo tesoro è stato individuato, una /th find");
                 }
             }
@@ -153,7 +153,7 @@ public class TreasureManager {
 
     // This should not be a task because on disable we cannot set tasks
     public void despawnAllTreasures() {
-        for (Location location : chestLocations) {
+        for (Location location : treasureLocations) {
             Chunk chunk = location.getChunk();
             if (!chunk.isLoaded()) {
                 chunk.load();
@@ -161,20 +161,20 @@ public class TreasureManager {
 
             Block block = location.getBlock();
             block.setType(Material.AIR);
-            chestLocations.remove(location);
+            treasureLocations.remove(location);
         }
-        chestLocations.clear();
+        treasureLocations.clear();
     }
 
     public void onEnable() {
-        chestLocationsFile = new File(this.plugin.getDataFolder(), STORAGE_FILE);
-        if (!chestLocationsFile.exists()) {
+        treasureLocationsFile = new File(this.plugin.getDataFolder(), STORAGE_FILE);
+        if (!treasureLocationsFile.exists()) {
             this.plugin.saveResource(STORAGE_FILE, false);
         }
-        this.chestLocationsConfig = YamlConfiguration.loadConfiguration(chestLocationsFile);
+        this.treasureLocationsConfig = YamlConfiguration.loadConfiguration(treasureLocationsFile);
 
-        if (chestLocationsConfig.isSet("chests")) {
-            chestLocationsConfig.getList("chests").forEach(location -> {
+        if (treasureLocationsConfig.isSet("chests")) {
+            treasureLocationsConfig.getList("chests").forEach(location -> {
                 if (location instanceof Location) {
                     spawnTreasureInLocation((Location) location);
                 }
@@ -183,9 +183,9 @@ public class TreasureManager {
     }
 
     public void onDisable() {
-        chestLocationsConfig.set("chests", chestLocations);
+        treasureLocationsConfig.set("chests", treasureLocations);
         try {
-            chestLocationsConfig.save(chestLocationsFile);
+            treasureLocationsConfig.save(treasureLocationsFile);
             despawnAllTreasures();
         } catch (IOException e) {
             logger.severe(e.getStackTrace().toString());
@@ -193,7 +193,7 @@ public class TreasureManager {
     }
 
     public boolean isTreasureLocation(Location chestLocation) {
-        for (Location loc : chestLocations) {
+        for (Location loc : treasureLocations) {
             if (loc.getBlock().equals(chestLocation.getBlock())) {
                 return true;
             }
@@ -202,15 +202,15 @@ public class TreasureManager {
     }
 
     public void removeTreasureLocation(Location chestLocation) {
-        for (Location loc : chestLocations) {
+        for (Location loc : treasureLocations) {
             if (loc.getBlock().equals(chestLocation.getBlock())) {
-                chestLocations.remove(loc);
+                treasureLocations.remove(loc);
             }
         }
     }
 
     public List<Location> getChestsLocations() {
-        return this.chestLocations;
+        return this.treasureLocations;
     }
 
     public void periodicRunner() {

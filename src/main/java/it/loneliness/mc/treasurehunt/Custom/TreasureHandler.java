@@ -9,6 +9,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -22,16 +23,16 @@ public class TreasureHandler implements Listener {
     private final JavaPlugin plugin;
     @SuppressWarnings("unused")
     private final LogHandler logger;
-    private final TreasureManager chestManager;
+    private final TreasureManager treasureManager;
 
-    public TreasureHandler(JavaPlugin plugin, LogHandler logger, TreasureManager chestManager) {
+    public TreasureHandler(JavaPlugin plugin, LogHandler logger, TreasureManager treasureManager) {
         this.plugin = plugin;
         this.logger = logger;
-        this.chestManager = chestManager;
+        this.treasureManager = treasureManager;
     }
 
     @EventHandler
-    public void onChestOpen(InventoryOpenEvent event) {
+    public void onTreasureOpen(InventoryOpenEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
@@ -40,13 +41,30 @@ public class TreasureHandler implements Listener {
         if (block.getType() == Material.CHEST) {
             Chest chest = (Chest) block.getState();
             Location chestLocation = chest.getLocation();
-            if (chestManager.isTreasureLocation(chestLocation)) {
+            if (treasureManager.isTreasureLocation(chestLocation)) {
                 Player player = (Player) event.getPlayer();
                 triggerEffect(chestLocation);
-                chestManager.removeTreasureLocation(chestLocation);
+                treasureManager.removeTreasureLocation(chestLocation);
                 block.setType(Material.AIR);
                 dropChestItems(chest);
                 player.sendMessage("You have discovered a hidden chest!");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTreasureBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (block.getType() == Material.CHEST) {
+            Chest chest = (Chest) block.getState();
+            Location chestLocation = chest.getLocation();
+            if (treasureManager.isTreasureLocation(chestLocation)) {
+                treasureManager.removeTreasureLocation(chestLocation);
+                triggerEffect(chestLocation);
+                Player player = event.getPlayer();
+                if(player != null){
+                    event.getPlayer().sendMessage("You have broken a hidden chest!");
+                }   
             }
         }
     }

@@ -17,7 +17,7 @@ public class Plugin extends JavaPlugin{
     CommandHandler commandHandler;
     TaskScheduler taskScheduler;
     private TreasureManager manager;
-    private TreasureHandler chestHandler;
+    private TreasureHandler treasureHandler;
     
     @Override
     public void onEnable() {
@@ -37,9 +37,9 @@ public class Plugin extends JavaPlugin{
         manager = new TreasureManager(this, logger);
         manager.onEnable();
 
-        chestHandler = new TreasureHandler(this, logger, manager);
+        treasureHandler = new TreasureHandler(this, logger, manager);
         PluginManager pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(chestHandler, this);
+        pluginManager.registerEvents(treasureHandler, this);
 
         //Make sure this is alligned with the plugin.yml, the first in the list is used for the permissions
         List<String> prefixes = new ArrayList<>(Arrays.asList("treasurehunt", "th"));
