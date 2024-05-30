@@ -100,7 +100,7 @@ public class Announcement {
         sendConsoleMessage(message);
     }
 
-    public static String applyFormat(String message) {
+    public String applyFormat(String message) {
         message = message.replace(">>", "»").replace("<<", "«");
 
         Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]){6}");

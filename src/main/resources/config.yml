@@ -4,6 +4,29 @@ scoreboard-id: "punteggiotreasurehunt"
 min-distance-from-center: 1000
 max-distance-from-center: 3500
 
+prizes-in-treasure:
+  - treasure:
+    - material: DIAMOND_SWORD
+      name: "&6Epic Sword"
+      lore:
+        - "&7This is a custom sword"
+        - "&7with epic powers"
+      enchantments:
+        DAMAGE_ALL: 5
+        DURABILITY: 3
+      amount: 2
+  - treasure:
+    - material: GOLDEN_APPLE
+      name: "&eGolden Apple"
+      lore:
+        - "&aA special golden apple"
+      enchantments:
+        DURABILITY: 1
+      amount: 3
+    - material: ENCHANTED_BOOK
+      enchantments:
+        KNOCKBACK: 2
+
 
 
 

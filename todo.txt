@@ -5,7 +5,7 @@
 - se chest si rompe levarla
 - se clicco su cartografo NPC con una mappa allora mi da la mappa aggiornata
 - aggiungere supporto per nether
-- aggiungere premio nella chest
-- fare in modo che la chest compaia in una caverna 
-- non deve essere solo a 0 coordinate y 
-- fare in modo che il task di aggiornamento e creazione nuova treasure chest sia molto lento
+x aggiungere premio nella chest
+x fare in modo che la chest compaia in una caverna 
+x non deve essere solo a 0 coordinate y 
+x fare in modo che il task di aggiornamento e creazione nuova treasure chest sia molto lento

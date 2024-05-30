@@ -2,12 +2,14 @@ package it.loneliness.mc.treasurehunt.Custom;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +17,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import it.loneliness.mc.treasurehunt.Plugin;
@@ -30,12 +35,14 @@ public class TreasureManager {
     private final LogHandler logger;
     private TreasureArea area;
     private Lock lock;
+    private Announcement announce;
 
     public TreasureManager(Plugin plugin, LogHandler logger) {
         this.plugin = plugin;
         this.logger = logger;
         this.area = new TreasureArea(plugin, logger);
         this.lock = new ReentrantLock();
+        this.announce = Announcement.getInstance(plugin);
     }
 
     public void spawnTreasureRandomly() {
@@ -56,6 +63,67 @@ public class TreasureManager {
         }.runTaskAsynchronously(this.plugin);
     }
 
+    public boolean validateAllPrizes(){
+        try{
+            List<Map<?, ?>> treasureSets = this.plugin.getConfig().getMapList("prizes-in-treasure");    
+            for (Map<?, ?> selectedItemSet : treasureSets) {
+                getPrize(selectedItemSet);
+            }
+        } catch (Exception e) {
+            logger.severe("Some prizes specified in the config are not valid");
+            logger.severe(e.getStackTrace().toString());
+            return false;
+        }
+
+        return true;        
+    }
+
+    private List<ItemStack> getPrize(Map<?, ?> selectedItemSet){
+        List<ItemStack> output = new ArrayList<>();
+        @SuppressWarnings("unchecked")
+        List<Map<?, ?>> items = (List<Map<?, ?>>) selectedItemSet.get("treasure");
+        for (Map<?, ?> itemMap : items) {
+            Material material = Material.getMaterial((String) itemMap.get("material"));
+            int amount = itemMap.containsKey("amount") ? (int) itemMap.get("amount") : 1;
+            ItemStack item = new ItemStack(material, amount);
+            ItemMeta meta = item.getItemMeta();
+
+            if (itemMap.containsKey("name")) {
+                meta.setDisplayName(announce.applyFormat((String) itemMap.get("name")));
+            }
+
+            if (itemMap.containsKey("lore")) {
+                @SuppressWarnings("unchecked")
+                List<String> lore = ((List<String>) itemMap.get("lore")).stream().map(s -> announce.applyFormat(s)).toList();
+                meta.setLore(lore);
+            }
+
+            if (itemMap.containsKey("enchantments")) {
+                @SuppressWarnings("unchecked")
+                Map<String, Integer> enchantments = (Map<String, Integer>) itemMap.get("enchantments");
+                for (Map.Entry<String, Integer> enchantment : enchantments.entrySet()) {
+                    @SuppressWarnings("deprecation")
+                    Enchantment ench = Enchantment.getByName(enchantment.getKey());
+                    meta.addEnchant(ench, enchantment.getValue(), true);
+                }
+            }
+
+            item.setItemMeta(meta);
+            output.add(item);
+        }
+        return output;
+    }
+
+    private List<ItemStack> getRandomPrizes() {
+        List<Map<?, ?>> treasureSets = this.plugin.getConfig().getMapList("prizes-in-treasure");
+        Random random = new Random();
+
+        Map<?, ?> selectedItemSet = treasureSets.get(random.nextInt(treasureSets.size()));
+        
+        return getPrize(selectedItemSet);
+
+    }
+
     public void spawnTreasureInLocation(Location location) {
         new BukkitRunnable() {
             @Override
@@ -68,6 +136,10 @@ public class TreasureManager {
                 Block block = location.getBlock();
                 block.setType(Material.CHEST);
                 BlockState state = block.getState();
+
+                Chest chest = (Chest) block.getState();
+                List<ItemStack> prizes = getRandomPrizes();
+                prizes.forEach(prize -> chest.getBlockInventory().addItem(prize));
 
                 if (state instanceof Chest) {
                     // Chest chest = (Chest) state;

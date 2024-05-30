@@ -49,6 +49,12 @@ public class Plugin extends JavaPlugin{
             this.getCommand(prefix).setTabCompleter(commandHandler);
         }
 
+        if (!lateValidateConfig()) {
+            logger.severe("Configuration is invalid. Disabling the plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.taskScheduler = new TaskScheduler(this, 60, manager); //in seconds
         taskScheduler.start();
     }
@@ -82,6 +88,15 @@ public class Plugin extends JavaPlugin{
         int b = getConfig().getInt("max-distance-from-center");
         if (scoreboardId.isBlank() || b < 0) {
             logger.severe("max-distance-from-center invalid!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean lateValidateConfig(){
+        if(!manager.validateAllPrizes()){
+            logger.severe("prizes in prizes-in-treasure are invalid!");
             return false;
         }
 
