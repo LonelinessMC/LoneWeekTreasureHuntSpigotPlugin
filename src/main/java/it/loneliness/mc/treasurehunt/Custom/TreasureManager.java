@@ -11,19 +11,25 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.bukkit.Chunk;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import it.loneliness.mc.treasurehunt.Plugin;
 import it.loneliness.mc.treasurehunt.Controller.Announcement;
+import it.loneliness.mc.treasurehunt.Controller.ScoreboardController;
 import it.loneliness.mc.treasurehunt.Model.LogHandler;
 
 public class TreasureManager {
@@ -36,6 +42,11 @@ public class TreasureManager {
     private TreasureArea area;
     private Lock lock;
     private Announcement announce;
+    private int pointsToOpener;
+    private int pointsToClose;
+    private int pointsCloseRadius;
+    private FileConfiguration config;
+    private ScoreboardController scoreboardController;
 
     public TreasureManager(Plugin plugin, LogHandler logger) {
         this.plugin = plugin;
@@ -43,6 +54,13 @@ public class TreasureManager {
         this.area = new TreasureArea(plugin, logger);
         this.lock = new ReentrantLock();
         this.announce = Announcement.getInstance(plugin);
+
+        config = this.plugin.getConfig();
+        pointsToOpener = config.getInt("points-to-opener");
+        pointsToClose = config.getInt("points-to-close");
+        pointsCloseRadius = config.getInt("close-range");
+
+        scoreboardController = ScoreboardController.getInstance(plugin);
     }
 
     public void spawnTreasureRandomly() {
@@ -216,6 +234,59 @@ public class TreasureManager {
     public void periodicRunner() {
         if (this.getChestsLocations().size() == 0) {
             this.spawnTreasureRandomly();
+        }
+    }
+
+    public void handleTreasureFound(Location openTreasureLocation, Player winner) {
+        this.removeTreasureLocation(openTreasureLocation);
+        this.triggerWinEffect(openTreasureLocation);
+
+        boolean foundWinner = false;
+        if(winner != null){
+            this.handleTrasureWinner(winner);
+            foundWinner = true;
+        }
+
+        for(Entity entity : openTreasureLocation.getWorld().getNearbyEntities(openTreasureLocation, pointsCloseRadius, pointsCloseRadius, pointsCloseRadius)){
+            if (entity instanceof Player) {
+                if(!foundWinner){
+                    this.handleTrasureWinner((Player) entity);
+                    foundWinner = true;
+                } else {
+                    this.handleTreasureClose((Player) entity);
+                }
+                
+            }
+        }
+    }
+
+    private void handleTrasureWinner(Player player) {
+        scoreboardController.incrementScore(player.getName(), pointsToOpener);
+        announce.announce(this.config.getString("win-broadcast-message").replace("{player}", player.getName()).replace("{points}", pointsToOpener+""));
+    }
+
+    private void handleTreasureClose(Player player) {
+        scoreboardController.incrementScore(player.getName(), pointsToClose);
+        announce.announce(this.config.getString("close-win-private-message").replace("{player}", player.getName()).replace("{points}", pointsToClose+""));
+    }
+
+    private void triggerWinEffect(Location loc) {
+        for (int i = 0; i < 3; i++) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Firework firework = loc.getWorld().spawn(loc, Firework.class);
+                    FireworkMeta meta = firework.getFireworkMeta();
+                    FireworkEffect effect = FireworkEffect.builder()
+                            .withColor(org.bukkit.Color.RED, org.bukkit.Color.GREEN, org.bukkit.Color.BLUE)
+                            .with(FireworkEffect.Type.BALL)
+                            .withFlicker()
+                            .build();
+                    meta.addEffect(effect);
+                    meta.setPower(1);
+                    firework.setFireworkMeta(meta);
+                }
+            }.runTaskLater(plugin, i * 10L); // Delay each firework a little for a better effect
         }
     }
 }

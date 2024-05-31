@@ -4,8 +4,21 @@ scoreboard-id: "punteggiotreasurehunt"
 min-distance-from-center: 1000
 max-distance-from-center: 3500
 
+# If chest is broken the closest player gets these points
+points-to-opener: 20
+# If chest is open or broken and the player is close enough they will get these points
+points-to-close: 10
+# Max distance of entities to be assigned points.
+close-range: 100
+
 #the name of the npc needs to contain the following substring
 npc-name: "Cartograf"
+
+#strings
+#{player} - subject
+#{points}
+win-broadcast-message: "{player} ha trovato un tesore e ha vinto {points} punti!"
+close-win-private-message: "Congratulazioni per aver contribuito a trovare il tesoro, hai vinto {points} punti!"
 
 prizes-in-treasure:
   - treasure:

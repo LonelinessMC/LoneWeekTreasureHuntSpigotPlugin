@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,15 +19,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursor;
 import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import it.loneliness.mc.treasurehunt.Plugin;
 import it.loneliness.mc.treasurehunt.Controller.Announcement;
 import it.loneliness.mc.treasurehunt.Model.LogHandler;
@@ -141,12 +136,12 @@ public class TreasureHandler implements Listener {
             Chest chest = (Chest) block.getState();
             Location chestLocation = chest.getLocation();
             if (treasureManager.isTreasureLocation(chestLocation)) {
+
                 Player player = (Player) event.getPlayer();
-                triggerEffect(chestLocation);
-                treasureManager.removeTreasureLocation(chestLocation);
+                treasureManager.handleTreasureFound(chestLocation, player);
+
                 block.setType(Material.AIR);
                 dropChestItems(chest);
-                player.sendMessage("You have discovered a hidden chest!");
             }
         }
     }
@@ -158,33 +153,10 @@ public class TreasureHandler implements Listener {
             Chest chest = (Chest) block.getState();
             Location chestLocation = chest.getLocation();
             if (treasureManager.isTreasureLocation(chestLocation)) {
-                treasureManager.removeTreasureLocation(chestLocation);
-                triggerEffect(chestLocation);
-                Player player = event.getPlayer();
-                if (player != null) {
-                    event.getPlayer().sendMessage("You have broken a hidden chest!");
-                }
-            }
-        }
-    }
 
-    private void triggerEffect(Location loc) {
-        for (int i = 0; i < 3; i++) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Firework firework = loc.getWorld().spawn(loc, Firework.class);
-                    FireworkMeta meta = firework.getFireworkMeta();
-                    FireworkEffect effect = FireworkEffect.builder()
-                            .withColor(org.bukkit.Color.RED, org.bukkit.Color.GREEN, org.bukkit.Color.BLUE)
-                            .with(FireworkEffect.Type.BALL)
-                            .withFlicker()
-                            .build();
-                    meta.addEffect(effect);
-                    meta.setPower(1);
-                    firework.setFireworkMeta(meta);
-                }
-            }.runTaskLater(plugin, i * 10L); // Delay each firework a little for a better effect
+                Player player = event.getPlayer();
+                treasureManager.handleTreasureFound(chestLocation, player);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
-- aggiungere punti a giocatore che apre
-- aggiungere punti a giocatori vicini
+x aggiungere punti a giocatore che apre
+x aggiungere punti a giocatori vicini
 - aggiornare tutte le stringhe con config
 x rinominare tutte le instanze della parola "chest" in "treasure"
 x se chest si rompe levarla
