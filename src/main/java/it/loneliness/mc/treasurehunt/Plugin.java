@@ -81,13 +81,30 @@ public class Plugin extends JavaPlugin{
         }
 
         int a = getConfig().getInt("min-distance-from-center");
-        if (scoreboardId.isBlank() || a < 0) {
+        if (a < 0) {
             logger.severe("min-distance-from-center invalid!");
             return false;
         }
         int b = getConfig().getInt("max-distance-from-center");
-        if (scoreboardId.isBlank() || b < 0) {
+        if (b < 0) {
             logger.severe("max-distance-from-center invalid!");
+            return false;
+        }
+
+
+        int c = getConfig().getInt("points-to-opener");
+        if (c < 0) {
+            logger.severe("points-to-opener invalid!");
+            return false;
+        }
+        int d = getConfig().getInt("points-to-close");
+        if (d < 0) {
+            logger.severe("points-to-close invalid!");
+            return false;
+        }
+        int e = getConfig().getInt("close-range");
+        if (e < 0) {
+            logger.severe("close-range invalid!");
             return false;
         }
 

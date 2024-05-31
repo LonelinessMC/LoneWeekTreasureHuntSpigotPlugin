@@ -111,22 +111,22 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                         HashMap<Integer, ItemStack> leftItems = player.getInventory().addItem(mapItem);
                         if(leftItems.isEmpty()){ // in this case player had space to be give the map
                             heldItem.setAmount(heldItem.getAmount()-1);
-                            announcement.sendPrivateMessage(player, "Hai generato una mappa che punta al tesoro più vicino");
+                            announcement.sendPrivateMessage(player, this.plugin.getConfig().getString("success-generate-map"));
                         } else {
-                            announcement.sendPrivateMessage(player, "Non hai abbastanza spazio nell'inventario");
+                            announcement.sendPrivateMessage(player, this.plugin.getConfig().getString("error-not-enough-space"));
                         }
                     }else{
                         player.getInventory().setItemInMainHand(mapItem);
-                        announcement.sendPrivateMessage(player, "Hai generato una mappa che punta al tesoro più vicino");
+                        announcement.sendPrivateMessage(player, this.plugin.getConfig().getString("success-generate-map"));
                     }                    
                 } else {
-                    announcement.sendPrivateMessage(params.sender, "In questo momento non ci sono tesori in questo mondo");
+                    announcement.sendPrivateMessage(params.sender, this.plugin.getConfig().getString("error-no-treasure-world"));
                 }
             } else {
-                announcement.sendPrivateMessage(params.sender, "In questo momento non ci sono tesori nel server");
+                announcement.sendPrivateMessage(params.sender, this.plugin.getConfig().getString("error-no-treasure"));
             }       
         } else {
-            announcement.sendPrivateMessage(params.sender, "Devi avere in mano una mappa vuota per poter usare questo comando");
+            announcement.sendPrivateMessage(params.sender, this.plugin.getConfig().getString("error-no-map-in-hand"));
         }
         return true;
     }

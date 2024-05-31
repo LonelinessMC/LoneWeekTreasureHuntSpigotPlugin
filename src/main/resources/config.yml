@@ -17,8 +17,14 @@ npc-name: "Cartograf"
 #strings
 #{player} - subject
 #{points}
-win-broadcast-message: "{player} ha trovato un tesore e ha vinto {points} punti!"
-close-win-private-message: "Congratulazioni per aver contribuito a trovare il tesoro, hai vinto {points} punti!"
+win-broadcast-message: "&#FE6847{player} &#57B8FFha trovato un tesore e ha vinto &#FE6847{points}&#57B8FF punti!"
+close-win-private-message: "&#57B8FFCongratulazioni per aver contribuito a trovare il tesoro, hai vinto &#FE6847{points}&#57B8FF punti!"
+
+success-generate-map: "&#57B8FFHai generato una mappa che punta al tesoro più vicino"
+error-not-enough-space: "&#57B8FFNon hai abbastanza spazio nell'inventario"
+error-no-treasure-world: "&#57B8FFIn questo momento non ci sono tesori in questo mondo"
+error-no-treasure: "&#57B8FFIn questo momento non ci sono tesori nel server"
+error-no-map-in-hand: "&#57B8FFDevi avere in mano una mappa vuota per poter usare questo comando"
 
 prizes-in-treasure:
   - treasure:

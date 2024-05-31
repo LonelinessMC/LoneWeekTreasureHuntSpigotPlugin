@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import org.bukkit.Chunk;
 import org.bukkit.FireworkEffect;
@@ -241,21 +242,26 @@ public class TreasureManager {
         this.removeTreasureLocation(openTreasureLocation);
         this.triggerWinEffect(openTreasureLocation);
 
-        boolean foundWinner = false;
         if(winner != null){
             this.handleTrasureWinner(winner);
-            foundWinner = true;
         }
 
-        for(Entity entity : openTreasureLocation.getWorld().getNearbyEntities(openTreasureLocation, pointsCloseRadius, pointsCloseRadius, pointsCloseRadius)){
-            if (entity instanceof Player) {
-                if(!foundWinner){
-                    this.handleTrasureWinner((Player) entity);
-                    foundWinner = true;
-                } else {
-                    this.handleTreasureClose((Player) entity);
-                }
-                
+        for(Player player : openTreasureLocation
+            .getWorld()
+            .getNearbyEntities(openTreasureLocation, pointsCloseRadius, pointsCloseRadius, pointsCloseRadius)
+            .stream()
+            .filter(entity -> entity instanceof Player)
+            .map(entity -> (Player) entity)
+            .sorted((player1, player2) -> Double.compare(
+                player1.getLocation().distance(openTreasureLocation),
+                player2.getLocation().distance(openTreasureLocation)))
+            .collect(Collectors.toList())
+        ){
+            if(winner == null){
+                this.handleTrasureWinner(player);
+                winner = player;
+            } else if(!player.equals(winner)) {
+                this.handleTreasureClose(player);
             }
         }
     }
@@ -267,7 +273,7 @@ public class TreasureManager {
 
     private void handleTreasureClose(Player player) {
         scoreboardController.incrementScore(player.getName(), pointsToClose);
-        announce.announce(this.config.getString("close-win-private-message").replace("{player}", player.getName()).replace("{points}", pointsToClose+""));
+        announce.sendPrivateMessage(player, this.config.getString("close-win-private-message").replace("{player}", player.getName()).replace("{points}", pointsToClose+""));
     }
 
     private void triggerWinEffect(Location loc) {
