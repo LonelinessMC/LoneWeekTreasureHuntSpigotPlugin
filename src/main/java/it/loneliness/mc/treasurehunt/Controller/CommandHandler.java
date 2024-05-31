@@ -33,7 +33,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     private final String permissionPrefix;
 
     private final List<CommandEntry> commandList;
-    private TreasureManager chestManager;
+    private TreasureManager treasureManager;
     private final Announcement announcement;
 
     public CommandHandler(Plugin plugin, List<String> allowedPrefixes, TreasureManager chestManager) {
@@ -58,18 +58,18 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         commandList.add(new CommandEntry("despawnall", permissionPrefix, this::despawnAllTreasures, false));
         commandList.add(new CommandEntry("runperiodic", permissionPrefix, this::runPeriodicTask, true));
 
-        this.chestManager = chestManager;
+        this.treasureManager = chestManager;
         this.announcement = Announcement.getInstance(plugin);
     }
 
     private boolean runPeriodicTask(CommandParams params){
-        chestManager.periodicRunner();
+        treasureManager.periodicRunner();
         announcement.sendPrivateMessage(params.sender, "Running periodic task forcfully");
         return true;
     }
 
     private boolean despawnAllTreasures(CommandParams params){
-        chestManager.despawnAllTreasures();
+        treasureManager.despawnAllTreasures();
         announcement.sendPrivateMessage(params.sender, "despawned all treasures");
         return true;
     }
@@ -78,7 +78,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         Player player = (Player) params.sender;
         ItemStack heldItem = player.getInventory().getItemInMainHand();
         if (heldItem.getType().equals(Material.MAP)) {
-            List<Location> locations = chestManager.getChestsLocations();
+            List<Location> locations = treasureManager.getChestsLocations();
             if(locations.size() > 0){
                 Location closestLocation = locations.stream().filter(location -> location.getWorld().equals(player.getLocation().getWorld())).min(Comparator.comparingDouble(location -> player.getLocation().distance(location))).orElse(null);
                 if(closestLocation != null){
@@ -134,7 +134,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     private boolean getList(CommandParams params) {
         ComponentBuilder builder = new ComponentBuilder(" - location of treasure chests\n");
 
-        for (Location loc : chestManager.getChestsLocations()) {
+        for (Location loc : treasureManager.getChestsLocations()) {
             String locString = Math.floor(loc.getX()) + " " + Math.floor(loc.getY()) + " " + Math.floor(loc.getZ());
             TextComponent locComponent = new TextComponent(locString + "\n");
             locComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + loc.getX() + " " + loc.getY() + " " + loc.getZ()));
@@ -157,7 +157,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     private boolean getTest(CommandParams params){
         Player player = (Player) params.sender;
-        chestManager.spawnTreasureInLocation(player.getLocation());
+        treasureManager.spawnTreasureInLocation(player.getLocation());
         return true;
     }
 

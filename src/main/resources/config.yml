@@ -4,6 +4,9 @@ scoreboard-id: "punteggiotreasurehunt"
 min-distance-from-center: 1000
 max-distance-from-center: 3500
 
+#the name of the npc needs to contain the following substring
+npc-name: "Cartograf"
+
 prizes-in-treasure:
   - treasure:
     - material: DIAMOND_SWORD

@@ -3,7 +3,7 @@
 - aggiornare tutte le stringhe con config
 x rinominare tutte le instanze della parola "chest" in "treasure"
 x se chest si rompe levarla
-- se clicco su cartografo NPC con una mappa allora mi da la mappa aggiornata
+x se clicco su cartografo NPC con una mappa allora mi da la mappa aggiornata
 - aggiungere supporto per nether
 x aggiungere premio nella chest
 x fare in modo che la chest compaia in una caverna 
