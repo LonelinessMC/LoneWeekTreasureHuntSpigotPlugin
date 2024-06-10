@@ -128,17 +128,20 @@ public class TreasureHandler implements Listener {
             return;
         }
 
-        Block block = event.getInventory().getLocation().getBlock();
-        if (block.getType() == Material.CHEST) {
-            Chest chest = (Chest) block.getState();
-            Location chestLocation = chest.getLocation();
-            if (treasureManager.isTreasureLocation(chestLocation)) {
-
-                Player player = (Player) event.getPlayer();
-                treasureManager.handleTreasureFound(chestLocation, player);
-
-                block.setType(Material.AIR);
-                dropChestItems(chest);
+        Location loc = event.getInventory().getLocation();
+        if (loc != null) { // some inventory return null location for example the crates plugin
+            Block block = loc.getBlock();
+            if (block.getType() == Material.CHEST) {
+                Chest chest = (Chest) block.getState();
+                Location chestLocation = chest.getLocation();
+                if (treasureManager.isTreasureLocation(chestLocation)) {
+    
+                    Player player = (Player) event.getPlayer();
+                    treasureManager.handleTreasureFound(chestLocation, player);
+    
+                    block.setType(Material.AIR);
+                    dropChestItems(chest);
+                }
             }
         }
     }

@@ -90,7 +90,7 @@ public class TreasureManager {
             }
         } catch (Exception e) {
             logger.severe("Some prizes specified in the config are not valid");
-            logger.severe(e.getStackTrace().toString());
+            logger.severe(e);
             return false;
         }
 
@@ -102,6 +102,7 @@ public class TreasureManager {
         @SuppressWarnings("unchecked")
         List<Map<?, ?>> items = (List<Map<?, ?>>) selectedItemSet.get("treasure");
         for (Map<?, ?> itemMap : items) {
+            logger.debug((String) itemMap.get("material"));
             Material material = Material.getMaterial((String) itemMap.get("material"));
             int amount = itemMap.containsKey("amount") ? (int) itemMap.get("amount") : 1;
             ItemStack item = new ItemStack(material, amount);
@@ -164,7 +165,7 @@ public class TreasureManager {
                     // Chest chest = (Chest) state;
                     // populateChest(chest.getInventory());
                     treasureLocations.add(location);
-                    Announcement.getInstance(plugin).announce("un nuovo tesoro è stato individuato, una /th find");
+                    Announcement.getInstance(plugin).announce("un nuovo tesoro è stato individuato, vai dal cartografo");
                 }
             }
         }.runTask(this.plugin);

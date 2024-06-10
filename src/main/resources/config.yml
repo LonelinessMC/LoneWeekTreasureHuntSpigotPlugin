@@ -7,7 +7,7 @@ max-distance-from-center: 3500
 # If chest is broken the closest player gets these points
 points-to-opener: 20
 # If chest is open or broken and the player is close enough they will get these points
-points-to-close: 10
+points-to-close: 5
 # Max distance of entities to be assigned points.
 close-range: 100
 
@@ -29,116 +29,105 @@ error-no-map-in-hand: "&#57B8FFDevi avere in mano una mappa vuota per poter usar
 prizes-in-treasure:
   - treasure:
     - material: DIAMOND_SWORD
-      name: "&6Epic Sword"
+      name: "&6Spada del Tesoriero"
       lore:
-        - "&7This is a custom sword"
-        - "&7with epic powers"
-      enchantments:
-        DAMAGE_ALL: 5
-        DURABILITY: 3
-      amount: 2
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 1
+    - material: OXEYE_DAISY
+      amount: 1
+    - material: RED_CANDLE
+      amount: 10
   - treasure:
-    - material: GOLDEN_APPLE
-      name: "&eGolden Apple"
+    - material: NETHER_WART
+      amount: 1
+    - material: BEACON
+      name: "&6Faro del Tesoriero"
       lore:
-        - "&aA special golden apple"
-      enchantments:
-        DURABILITY: 1
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 1
+    - material: WHITE_CANDLE
+      amount: 10
+  - treasure:
+    - material: SUGAR_CANE
+      amount: 6
+    - material: DIAMOND_AXE
+      name: "&6Ascia del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
       amount: 3
+    - material: GRAY_CANDLE
+      amount: 10
+  - treasure:
+    - material: RED_MUSHROOM
+      amount: 1
+    - material: ARROW
+      name: "&6Frecce del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 32
+    - material: BLUE_CANDLE
+      amount: 10
+  - treasure:
+    - material: HONEYCOMB
+      amount: 1
+    - material: SPECTRAL_ARROW
+      name: "&6Frecce spettrali del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 10
+    - material: ORANGE_CANDLE
+      amount: 10
+  - treasure:
+    - material: PRISMARINE_SHARD
+      amount: 1
+    - material: BOW
+      name: "&6Arco del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 1
+    - material: YELLOW_CANDLE
+      amount: 10
+  - treasure:
+    - material: STICK
+      amount: 1
+    - material: EXPERIENCE_BOTTLE
+      name: "&6Esperienza del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 10
+    - material: GREEN_CANDLE
+      amount: 10
+  - treasure:
+    - material: CHAIN
+      amount: 1
+    - material: GHAST_TEAR
+      name: "&6Lacrime del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 1
+    - material: LIME_CANDLE
+      amount: 10
+  - treasure:
+    - material: SMALL_DRIPLEAF
+      amount: 1
+    - material: PAPER
+      name: "&6Carta del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
+      amount: 1
+    - material: PINK_CANDLE
+      amount: 10
+  - treasure:
+    - material: AZURE_BLUET
+      amount: 1
     - material: ENCHANTED_BOOK
+      name: "&6Magia del Tesoriero"
+      lore:
+        - "&7LoneWeek - Treasure Hunt"
       enchantments:
-        KNOCKBACK: 2
+        LUCK_OF_THE_SEA: 1
+    - material: PURPLE_CANDLE
+      amount: 10
 
 
-
-
-
-minutes-between-actions: 20
-
-#format is minecraftId:quantity:awardPoints:expireMinutes
-#ensure you do not use and item the can be dismatled and recrated such as a diamond block
-craft-actions:
-  - ARROW:64:2:60
-  - DIAMOND_SWORD:10:3:60
-  - DIAMOND_PICKAXE:10:4:60
-  - DIAMOND_BOOTS:10:5:60
-  - DIAMOND_HELMET:10:6:60
-  - DIAMOND_LEGGINGS:10:7:60
-  - DIAMOND_CHESTPLATE:10:8:60
-  - NETHERITE_INGOT:10:10:60
-  - FIREWORK_ROCKET:64:5:60
-  - CAKE:1:8:60
-  - PUMPKIN_PIE:2:4:60
-  - COOKIE:64:4:60
-  - BREAD:64:2:60
-  - GOLDEN_APPLE:5:6:60
-  - BOW:3:2:60
-
-trade-actions:
-  - ARMORER:3:2:60
-  - BUTCHER:3:2:60
-  - CARTOGRAPHER:3:2:60
-  - CLERIC:3:2:60
-  - FARMER:3:2:60
-  - FISHERMAN:3:2:60
-  - FLETCHER:3:2:60
-  - LEATHERWORKER:3:2:60
-  - LIBRARIAN:3:2:60
-  - MASON:3:2:60
-  - SHEPHERD:3:2:60
-  - TOOLSMITH:3:2:60
-  - WEAPONSMITH:3:2:60
-
-kill-actions:
-  - POLAR_BEAR:1:1:60
-  - WOLF:1:1:60
-  - CHICKEN:5:1:60
-  - BAT:5:1:60
-  - BEE:3:1:60
-  - PIG:5:1:60
-  - RABBIT:5:1:60
-  - SALMON:10:1:60
-  - SHEEP:5:1:60
-  - SQUID:10:1:60
-  - SNOWMAN:5:2:60
-  - GLOW_SQUID:5:2:60
-  - CREEPER:5:2:60
-  - SPIDER:5:2:60
-  - SKELETON:5:2:60
-  - ZOMBIE:5:2:60
-  - DROWNED:5:3:60
-  - ENDERMAN:4:3:60
-  - PIGLIN:3:3:60
-  - PHANTOM:3:4:60
-  - HOGLIN:3:4:60
-  - BLAZE:3:4:60
-  - IRON_GOLEM:1:4:60
-  - GUARDIAN:2:8:60
-  - WARDEN:1:10:60
-
-
-current-tasks-prefix: "- &#2176AECompleta & Vinci!"
-
-#available parameters are
-#{awarded_points}
-#{needed_repetitions}
-#{player_name}
-#{player_repetitions}
-#{player_remaining_repetitions}
-#{remaining_minutes}
-#{custom} - either <material>/<trading villager>/<monster to kill>
-
-craft-progress: "&#57B8FFContinua così, crafta ancora &#FE6847{player_remaining_repetitions} &#2176AE{custom}&#57B8FF per guadagnare &#FE6847{awarded_points}&#57B8FF punti."
-craft-success: "&#FE6847{player_name}&#57B8FF ha craftato &#2176AE{needed_repetitions} {custom}&#57B8FF ed ha vinto &#FE6847{awarded_points}&#57B8FF punti!"
-craft-task-description-ongoing: "&#FE6847({player_repetitions}/{needed_repetitions}) - &#57B8FFCrafta {needed_repetitions} &#57B8FF{custom}&#57B8FF entro {remaining_minutes} minuti per &#FE6847{awarded_points}&#57B8FF punti"
-craft-task-description-completed: "&#FE6847&m({player_repetitions}/{needed_repetitions}) - &#57B8FF&mCrafta {needed_repetitions} &#57B8FF&m{custom}&#57B8FF&m entro {remaining_minutes} minuti per &#FE6847&m{awarded_points}&#57B8FF&m punti"
-
-trade-progress: "&#57B8FFContinua così, fai con ancora &#FE6847{player_remaining_repetitions}&#57B8FF trade con &#2176AE{custom}&#57B8FF per guadagnare &#FE6847{awarded_points}&#57B8FF punti."
-trade-success: "&#FE6847{player_name}&#57B8FF ha fatto &#2176AE{needed_repetitions}&#57B8FF trade con &#2176AE{custom}&#57B8FF ed ha vinto &#FE6847{awarded_points}&#57B8FF punti!"
-trade-task-description-ongoing: "&#FE6847({player_repetitions}/{needed_repetitions}) - &#57B8FFFai {needed_repetitions} trade con &#57B8FF{custom}&#57B8FF entro {remaining_minutes} minuti per &#FE6847{awarded_points}&#57B8FF punti"
-trade-task-description-completed: "&#FE6847&m({player_repetitions}/{needed_repetitions}) - &#57B8FF&mFai {needed_repetitions} trade con &#57B8FF&m{custom}&#57B8FF&m entro {remaining_minutes} minuti per &#FE6847&m{awarded_points}&#57B8FF&m punti"
-
-kill-progress: "&#57B8FFContinua così, uccidi ancora &#FE6847{player_remaining_repetitions} &#2176AE{custom}&#57B8FF per guadagnare &#FE6847{awarded_points}&#57B8FF punti."
-kill-success: "&#FE6847{player_name}&#57B8FF ha ucciso &#2176AE{needed_repetitions} {custom}&#57B8FF ed ha vinto &#FE6847{awarded_points}&#57B8FF punti!"
-kill-task-description-ongoing: "&#FE6847({player_repetitions}/{needed_repetitions}) - &#57B8FFUccidi {needed_repetitions} &#57B8FF{custom}&#57B8FF entro {remaining_minutes} minuti per &#FE6847{awarded_points}&#57B8FF punti"
-kill-task-description-completed: "&#FE6847&m({player_repetitions}/{needed_repetitions}) - &#57B8FF&mUccidi {needed_repetitions} &#57B8FF&m{custom}&#57B8FF&m entro {remaining_minutes} minuti per &#FE6847&m{awarded_points}&#57B8FF&m punti"
+debug: true

@@ -1,5 +1,7 @@
 package it.loneliness.mc.treasurehunt.Model;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +47,11 @@ public class LogHandler {
         log(msg, debug ? Level.INFO : Level.CONFIG);
     }
 
+    public void debug(String msg) {
+        if(this.debug)
+            log(msg, Level.INFO);
+    }
+
     public void info(String msg) {
         log(msg, Level.INFO);
     }
@@ -55,5 +62,13 @@ public class LogHandler {
 
     public void severe(String msg) {
         log(msg, Level.SEVERE);
+    }
+
+    public void severe(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String stackTrace = sw.toString();
+        this.severe(stackTrace);
     }
 }
